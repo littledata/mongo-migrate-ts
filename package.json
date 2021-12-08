@@ -1,5 +1,5 @@
 {
-  "name": "mongo-migrate-ts",
+  "name": "@littledata/mongo-migrate-ts",
   "version": "0.0.1",
   "main": "dist/lib/index.js",
   "types": "dist/lib/index.d.ts",
