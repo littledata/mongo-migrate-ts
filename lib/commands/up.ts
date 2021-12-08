@@ -15,13 +15,8 @@ interface CommandUpOptions {
 }
 
 export const up = async (opts: CommandUpOptions): Promise<void> => {
-  const {
-    uri,
-    database,
-    options,
-    migrationsCollection,
-    migrationsDir,
-  } = processConfig(opts.config);
+  const { uri, database, options, migrationsCollection, migrationsDir } =
+    processConfig(opts.config);
   let connection: DatabaseConnection;
   try {
     connection = await mongoConnect(uri, database, options);
@@ -50,7 +45,7 @@ export const up = async (opts: CommandUpOptions): Promise<void> => {
         `Applying migration ${migration.className}`
       ).start();
       try {
-        await migration.instance.up(connection.db);
+        await migration.instance.up(connection.db, connection.client);
         await insertMigration(collection, migration);
         localSpinner.succeed(`Migration ${migration.className} up`).stop();
       } catch (e) {

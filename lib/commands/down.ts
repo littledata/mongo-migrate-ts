@@ -39,7 +39,7 @@ const downLastAppliedMigration = async (
     throw new Error(`Migration (${lastApplied.className}) not found`);
   }
 
-  await migration.instance.down(connection.db);
+  await migration.instance.down(connection.db, connection.client);
   await deleteMigration(collection, migration);
   spinner.succeed(`Migration ${lastApplied.className} down`).stop();
 };
@@ -85,9 +85,8 @@ export const down = async ({
   mode,
   config,
 }: CommandDownOptions): Promise<void> => {
-  const { uri, database, options, migrationsCollection } = processConfig(
-    config
-  );
+  const { uri, database, options, migrationsCollection } =
+    processConfig(config);
   const connection = await mongoConnect(uri, database, options);
   const collection = connection.db.collection(migrationsCollection);
   try {
